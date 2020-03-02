@@ -17,7 +17,5 @@ end
 
 #continue
 
-#run ~/code/Fast-Downward-c9844230bcf2/output.sas
-
 run --search "astar(lmcut())"
 
