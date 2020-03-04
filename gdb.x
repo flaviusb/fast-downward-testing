@@ -1,5 +1,6 @@
 set language c++
-set $basic_sizes_max = 0
+# $internal_size_count_max is the number of elements the OpenList thinks it has
+set $internal_size_count_max = 0
 set pagination off
 set print pretty on
 set print object on
@@ -10,7 +11,7 @@ rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::.*$
 commands
   #print *this
   if (this.size > $basic_sizes_max)
-    set $basic_sizes_max = this.size
+    set $internal_size_count_max = this.size
   end
   continue
 end
