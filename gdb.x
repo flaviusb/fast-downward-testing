@@ -30,17 +30,17 @@ class GrovelOpenLists (gdb.Command):
     # We dispatch based on type
     size = 0
     if arg.type.tag == "AlternationOpenList":
-      size = grovel_aol(self, arg)
+      size = self.grovel_aol(arg)
     elif arg.type.tag == "BestFirstOpenList":
-      size = grovel_bfol(self, arg)
+      size = self.grovel_bfol(arg)
     elif arg.type.tag == "EpsilonGreedyOpenList":
-      size = grovel_egol(self, arg)
+      size = self.grovel_egol(arg)
     elif arg.type.tag == "ParetoOpenList":
-      size = grovel_pol(self, arg)
-    elif arg.type.tag == "TieBreakingOpenList":
-      size = grovel_tol(self, arg)
+      size = self.grovel_pol(arg)
+    elif arg.type.tag == "tiebreaking_open_list::TieBreakingOpenList<StateID>":
+      size = self.grovel_tol(arg)
     elif arg.type.tag == "TypeBasedOpenList":
-      size = grovel_tbol(self, arg)
+      size = self.grovel_tbol(arg)
     else:
       print(f'Did not understand how to deal with object with tag {arg.type.tag}')
     return size
