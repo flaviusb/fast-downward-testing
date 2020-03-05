@@ -1,6 +1,7 @@
 set language c++
 # $internal_size_count_max is the number of elements the OpenList thinks it has
 set $internal_size_count_max = 0
+set $grovelled_size_max = 0
 set pagination off
 set print pretty on
 set print object on
@@ -12,19 +13,22 @@ import gdb
 import gdb.types
 import re
 
-class GrovelOpenLists (gdb.Command):
+class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
 
   def __init__ (self):
-    super (GrovelOpenLists, self).__init__ ("grovel-openlist", gdb.COMMAND_DATA, gdb.COMPLETE_SYMBOL)
+    super (GrovelOpenLists, self).__init__ ("grovel")
 
-  def invoke (self, arg, from_tty):
-    argv = gdb.string_to_argv(arg)
-    if len(argv) == 1:
-      size = self.grovel(gdb.parse_and_eval(argv[0]))
-      print(size)
-    else:
-      print("grovel-openlist expects one argument")
+  def invoke (self, arg):
+    return self.grovel(arg)
+    #size = 0
+    #argv = gdb.string_to_argv(arg)
+    #if len(argv) == 1:
+    #  size = self.grovel(gdb.parse_and_eval(argv[0]))
+    #  print(size)
+    #else:
+    #  print("grovel expects one argument")
+    #return size
 
   def grovel(self, arg):
     # We dispatch based on type
@@ -72,7 +76,11 @@ end
 rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::.*$
 commands
   #print *this
-  grovel-openlist *this
+  #print $grovel(*this)
+  set $temp_grovel = $grovel(*this)
+  if ($temp_grovel > $grovelled_size_max)
+    set $grovelled_size_max = $temp_grovel
+  end
   if (this.size > $internal_size_count_max)
     set $internal_size_count_max = this.size
   end
