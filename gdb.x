@@ -62,7 +62,13 @@ class GrovelOpenLists (gdb.Function):
     return 0
 
   def grovel_tol(self, arg):
-    return 0
+    # Get base size
+    base_size = arg.sizeof
+    start = arg['buckets']['_M_t']['_M_impl']['_M_header']['_M_left']
+    end   = arg['buckets']['_M_t']['_M_impl']['_M_header']
+    buckets_size = 0
+    evaluators_size = 0
+    return (base_size + buckets_size + evaluators_size)
 
   def grovel_tbol(self, arg):
     return 0
