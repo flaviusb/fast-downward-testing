@@ -63,7 +63,7 @@ class GrovelOpenLists (gdb.Function):
 
   def grovel_tol(self, arg):
     # Get base size
-    base_size = arg.sizeof
+    base_size = arg.type.sizeof
     start = arg['buckets']['_M_t']['_M_impl']['_M_header']['_M_left']
     end   = arg['buckets']['_M_t']['_M_impl']['_M_header']
     buckets_size = 0
@@ -78,20 +78,28 @@ GrovelOpenLists ()
 
 end
 
+set $internal_size_count_max = 0
 
 rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::.*$
 commands
   #print *this
+  #print this.size
+  if (this.size > $internal_size_count_max)
+    set $internal_size_count_max = this.size
+  end
+  #print this.size
+  #print $internal_size_count_max
   #print $grovel(*this)
   set $temp_grovel = $grovel(*this)
   if ($temp_grovel > $grovelled_size_max)
     set $grovelled_size_max = $temp_grovel
   end
-  if (this.size > $internal_size_count_max)
-    set $internal_size_count_max = this.size
-  end
+  #print $temp_grovel
+  #print $internal_size_count_max
   continue
 end
+
+clear TieBreakingOpenList<StateID>::TieBreakingOpenList
 
 #continue
 
