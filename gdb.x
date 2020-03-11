@@ -25,7 +25,7 @@ import os.path
 sys.path.insert(0, libcxxpath)
 import libstdcxx.v6
 
-from libstdcxx.v6.printers import RbtreeIterator
+from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type
 
 class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
@@ -82,8 +82,12 @@ class GrovelOpenLists (gdb.Function):
     buckets_size = 0
     buckets_base_size = arg['buckets'].type.sizeof
     bucket_iterator = RbtreeIterator(arg['buckets'])
-    for nodes in bucket_iterator:
-      print(nodes)
+    link_type = find_type(find_type(arg['buckets'].type, '_Rep_type'), '_Link_type')
+    for node in bucket_iterator:
+      real_node = node.cast(link_type).dereference()
+      print(node)
+      print(real_node)
+      print(get_value_from_Rb_tree_node(real_node))
     evaluators_size = 0
     return (base_size + buckets_size + buckets_base_size + evaluators_size)
 
@@ -104,15 +108,15 @@ commands
   if (this.size > $internal_size_count_max)
     set $internal_size_count_max = this.size
   end
-  #print this.size
+  print this.size
   #print $internal_size_count_max
   #print $grovel(*this)
   set $temp_grovel = $grovel(*this)
   if ($temp_grovel > $grovelled_size_max)
     set $grovelled_size_max = $temp_grovel
   end
-  #print $temp_grovel
-  #print $internal_size_count_max
+  print $temp_grovel
+  print $internal_size_count_max
   continue
 end
 
