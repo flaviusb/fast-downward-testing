@@ -12,6 +12,20 @@ python
 import gdb
 import gdb.types
 import re
+import itertools
+
+
+# So, C++ and gdb are bad
+# I have not found a way to do this portably
+# You will have to edit the path to libstdcxx manually
+libcxxpath = '/usr/share/gcc-data/x86_64-pc-linux-gnu/8.3.0/python/'
+import sys
+import os
+import os.path
+sys.path.insert(0, libcxxpath)
+import libstdcxx.v6
+
+#import libstdcxx.v6.printers
 
 class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
