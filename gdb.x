@@ -25,7 +25,7 @@ import os.path
 sys.path.insert(0, libcxxpath)
 import libstdcxx.v6
 
-#import libstdcxx.v6.printers
+from libstdcxx.v6.printers import RbtreeIterator
 
 class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
@@ -78,11 +78,14 @@ class GrovelOpenLists (gdb.Function):
   def grovel_tol(self, arg):
     # Get base size
     base_size = arg.type.sizeof
-    start = arg['buckets']['_M_t']['_M_impl']['_M_header']['_M_left']
-    end   = arg['buckets']['_M_t']['_M_impl']['_M_header']
+    # Now deal with the map<vecor<bitset>, deque<StateID>>
     buckets_size = 0
+    buckets_base_size = arg['buckets'].type.sizeof
+    bucket_iterator = RbtreeIterator(arg['buckets'])
+    for nodes in bucket_iterator:
+      print(nodes)
     evaluators_size = 0
-    return (base_size + buckets_size + evaluators_size)
+    return (base_size + buckets_size + buckets_base_size + evaluators_size)
 
   def grovel_tbol(self, arg):
     return 0
