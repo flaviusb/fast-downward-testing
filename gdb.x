@@ -84,15 +84,18 @@ class GrovelOpenLists (gdb.Function):
     bucket_iterator = RbtreeIterator(arg['buckets'])
     link_type = find_type(find_type(arg['buckets'].type, '_Rep_type'), '_Link_type')
     for node in bucket_iterator:
+      # Add node pointer size
+      buckets_size += node.type.sizeof
       real_node = node.cast(link_type).dereference()
+      buckets_size += real_node.type.sizeof
       #print(node)
       #print(real_node)
       #print(get_value_from_Rb_tree_node(real_node))
       pair = get_value_from_Rb_tree_node(real_node)
       key = pair['first']
       item = pair['second']
-      print(key)
-      print(item)
+      #print(key)
+      #print(item)
     evaluators_size = 0
     return (base_size + buckets_size + buckets_base_size + evaluators_size)
 
