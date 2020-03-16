@@ -82,7 +82,7 @@ import os.path
 sys.path.insert(0, libcxxpath)
 import libstdcxx.v6
 
-from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type
+from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type, StdVectorPrinter
 
 class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
@@ -133,7 +133,6 @@ class GrovelOpenLists (gdb.Function):
     return 0
 
   def grovel_tol(self, arg):
-    int_size = 4
     # Get base size
     base_size = arg.type.sizeof
     # Now deal with the map<vecor<bitset>, deque<StateID>>
@@ -154,12 +153,15 @@ class GrovelOpenLists (gdb.Function):
       item = pair['second']
       # Key is a vector<int>, which means the size is the size of 'key' plus the size of the inner storage array,
       # as the ints are stored directly rather than as pointers
-      # This means we can just use the capacity member function to get the size of the allocated array, multiplied by the size of int
-      buckets_size += key.type.sizeof + (key.capacity() * int_size)
+      # For the moment we use a StdVectorPrinter though, as size (and in cxx11, capacity) are optimised out
+      key_vec = StdVectorPrinter('int', key).children()
+      for node in key_vec:
+        buckets_size += node[1].type.sizeof
+      buckets_size += key.type.sizeof
       # item is a deque<StateID> and Deques make no guarantees on how their storage is implemented; we have to grovel through to be sure
       # We can approximate for the moment by multiplying sizeof StateID with size()
       # (Treat StateID as an int for the moment)
-      buckets_size += item.type.sizeof + (item.size * int_size)
+      buckets_size += item.type.sizeof #+ (item.size * int_size)
       #print(key)
       #print(item)
     evaluators_size = 0
