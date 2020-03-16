@@ -155,7 +155,11 @@ class GrovelOpenLists (gdb.Function):
       # Key is a vector<int>, which means the size is the size of 'key' plus the size of the inner storage array,
       # as the ints are stored directly rather than as pointers
       # This means we can just use the capacity member function to get the size of the allocated array, multiplied by the size of int
-      buckets_size += key.capacity() * int_size
+      buckets_size += key.type.sizeof + (key.capacity() * int_size)
+      # item is a deque<StateID> and Deques make no guarantees on how their storage is implemented; we have to grovel through to be sure
+      # We can approximate for the moment by multiplying sizeof StateID with size()
+      # (Treat StateID as an int for the moment)
+      buckets_size += item.type.sizeof + (item.size * int_size)
       #print(key)
       #print(item)
     evaluators_size = 0
