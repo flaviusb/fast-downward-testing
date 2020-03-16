@@ -1,7 +1,64 @@
+#!/bin/bash
+
+
+libcxxpath='/usr/share/gcc-data/x86_64-pc-linux-gnu/8.3.0/python/'
+arguments='--search "astar(lmcut())"'
+
+usage() { cat <<HELP
+gdb.x.sh: Generates a gdb.x command set.
+Options:
+  --libcxxpath  PATH
+  --arguments   QUOTED FAST DOWNWARD SEARCH STRING
+
+Any argument not given will use a default value.
+
+HELP
+exit 0;
+}
+
+while [[ $# > 0 ]]; do
+    if [ $# = 1 ]; then
+      opt="$1"
+      case "${opt}" in
+        -h)
+          usage
+          ;;
+        --help)
+          usage
+          ;;
+        *)
+          echo "I don't understand: $opt"
+          exit 1
+          ;;
+      esac
+    fi
+    opt="$1"
+    value="$2"
+    case "${opt}" in
+      --libcxxpath)
+        libcxxpath="$value"
+        shift
+        shift
+        ;;
+      --arguments)
+        arguments="$value"
+        shift
+        shift
+        ;;
+      *)
+        echo "I don't understand: $opt"
+        exit 1
+        ;;
+    esac
+done
+
+
+
+cat > gdb.x <<blerg
 set language c++
-# $internal_size_count_max is the number of elements the OpenList thinks it has
-set $internal_size_count_max = 0
-set $grovelled_size_max = 0
+# \$internal_size_count_max is the number of elements the OpenList thinks it has
+set \$internal_size_count_max = 0
+set \$grovelled_size_max = 0
 set pagination off
 set print pretty on
 set print object on
@@ -18,7 +75,7 @@ import itertools
 # So, C++ and gdb are bad
 # I have not found a way to do this portably
 # You will have to edit the path to libstdcxx manually
-libcxxpath = '/usr/share/gcc-data/x86_64-pc-linux-gnu/8.3.0/python/'
+libcxxpath = "$libcxxpath"
 import sys
 import os
 import os.path
@@ -107,24 +164,24 @@ GrovelOpenLists ()
 
 end
 
-set $internal_size_count_max = 0
+set \$internal_size_count_max = 0
 
-rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::.*$
+rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::.*\$
 commands
   #print *this
   #print this.size
-  if (this.size > $internal_size_count_max)
-    set $internal_size_count_max = this.size
+  if (this.size > \$internal_size_count_max)
+    set \$internal_size_count_max = this.size
   end
   print this.size
-  #print $internal_size_count_max
-  #print $grovel(*this)
-  set $temp_grovel = $grovel(*this)
-  if ($temp_grovel > $grovelled_size_max)
-    set $grovelled_size_max = $temp_grovel
+  #print \$internal_size_count_max
+  #print \$grovel(*this)
+  set \$temp_grovel = \$grovel(*this)
+  if (\$temp_grovel > \$grovelled_size_max)
+    set \$grovelled_size_max = \$temp_grovel
   end
-  print $temp_grovel
-  print $internal_size_count_max
+  print \$temp_grovel
+  print \$internal_size_count_max
   continue
 end
 
@@ -132,5 +189,6 @@ clear TieBreakingOpenList<StateID>::TieBreakingOpenList
 
 #continue
 
-run --search "astar(lmcut())"
+run $arguments
+blerg
 
