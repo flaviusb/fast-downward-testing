@@ -133,6 +133,7 @@ class GrovelOpenLists (gdb.Function):
     return 0
 
   def grovel_tol(self, arg):
+    int_size = 4
     # Get base size
     base_size = arg.type.sizeof
     # Now deal with the map<vecor<bitset>, deque<StateID>>
@@ -151,6 +152,10 @@ class GrovelOpenLists (gdb.Function):
       pair = get_value_from_Rb_tree_node(real_node)
       key = pair['first']
       item = pair['second']
+      # Key is a vector<int>, which means the size is the size of 'key' plus the size of the inner storage array,
+      # as the ints are stored directly rather than as pointers
+      # This means we can just use the capacity member function to get the size of the allocated array, multiplied by the size of int
+      buckets_size += key.capacity() * int_size
       #print(key)
       #print(item)
     evaluators_size = 0
