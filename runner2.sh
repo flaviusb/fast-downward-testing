@@ -6,8 +6,10 @@ sas=`ls ~/code/Fast-Downward-c9844230bcf2/output.sas`
 usage() { cat <<HELP
 runner2.sh: Memory size measuring harness for fast downward.
 Options:
-  --downward  PATH
-  --sas       PATH
+  --downward  QUOTED PATH
+              Full path to downward executable
+  --sas       QUOTED PATH
+              Full path to the sas file to search
 
 Any argument not given will use a default value.
 
