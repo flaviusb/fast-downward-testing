@@ -192,16 +192,16 @@ commands
   if (this.size > \$internal_size_count_max)
     set \$internal_size_count_max = this.size
   end
-  print this.size
+  printf "Current abstract size of open list: %u\n", this.size
   #print \$internal_size_count_max
   #print \$grovel(*this)
   set \$temp_grovel = \$grovel(*this)
-  print \$temp_grovel
+  printf "Current approximate concrete size of open list (in bytes): %u\n", \$temp_grovel
   if (\$temp_grovel > \$grovelled_size_max)
     set \$grovelled_size_max = \$temp_grovel
   end
-  print \$grovelled_size_max
-  print \$internal_size_count_max
+  printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
+  printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
   continue
 end
 
