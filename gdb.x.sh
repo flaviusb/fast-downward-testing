@@ -82,7 +82,7 @@ import os.path
 sys.path.insert(0, libcxxpath)
 import libstdcxx.v6
 
-from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type, StdVectorPrinter
+from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type, StdVectorPrinter, StdDequePrinter
 
 class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
@@ -159,9 +159,10 @@ class GrovelOpenLists (gdb.Function):
         buckets_size += node[1].type.sizeof
       buckets_size += key.type.sizeof
       # item is a deque<StateID> and Deques make no guarantees on how their storage is implemented; we have to grovel through to be sure
-      # We can approximate for the moment by multiplying sizeof StateID with size()
-      # (Treat StateID as an int for the moment)
-      buckets_size += item.type.sizeof #+ (item.size * int_size)
+      item_vec = StdDequePrinter('StateID', item).children()
+      for node in item_vec:
+        buckets_size += node[1].type.sizeof
+      buckets_size += item.type.sizeof
       #print(key)
       #print(item)
     evaluators_size = 0
