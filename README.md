@@ -20,7 +20,7 @@ The `runner2.sh` shell file will run fast downward over a sas file and measure t
 
 The location of the fast downward executable and the location of the sas file should be specified.
 
-For example, if fast downward is at `/home/example-user/code/Fast-Downward-c9844230bcf2/builds/release/bin/downward` and the sas file you want to run is at `/home/example-user/code/Fast-Downward-c9844230bcf2/output.sas` you could run this ommand:
+For example, if fast downward is at `/home/example-user/code/Fast-Downward-c9844230bcf2/builds/release/bin/downward` and the sas file you want to run is at `/home/example-user/code/Fast-Downward-c9844230bcf2/output.sas` you could run this command:
 
 ```
 ./runner2.sh --downward "/home/example-user/code/Fast-Downward-c9844230bcf2/builds/release/bin/downward" --sas "/home/example-user/code/Fast-Downward-c9844230bcf2/output.sas"
