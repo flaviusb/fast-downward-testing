@@ -82,7 +82,7 @@ import os.path
 sys.path.insert(0, libcxxpath)
 import libstdcxx.v6
 
-from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type, StdVectorPrinter, StdDequePrinter
+from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type, StdVectorPrinter, StdDequePrinter, SharedPointerPrinter
 
 class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
@@ -166,6 +166,13 @@ class GrovelOpenLists (gdb.Function):
       #print(key)
       #print(item)
     evaluators_size = 0
+    evaluators_size += arg['evaluators'].type.sizeof
+    evaluators_vec = StdVectorPrinter('shared_ptr<Evaluator>', arg['evaluators']).children()
+    for node in evaluators_vec:
+      evaluators_size += node[1].type.sizeof
+      sptr = SharedPointerPrinter('Evaluator', node[1]).children()
+      for ptr in sptr:
+        evaluators_size += ptr[1].dereference().type.sizeof
     return (base_size + buckets_size + buckets_base_size + evaluators_size)
 
   def grovel_tbol(self, arg):
@@ -189,10 +196,11 @@ commands
   #print \$internal_size_count_max
   #print \$grovel(*this)
   set \$temp_grovel = \$grovel(*this)
+  print \$temp_grovel
   if (\$temp_grovel > \$grovelled_size_max)
     set \$grovelled_size_max = \$temp_grovel
   end
-  print \$temp_grovel
+  print \$grovelled_size_max
   print \$internal_size_count_max
   continue
 end
