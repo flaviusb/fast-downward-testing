@@ -185,7 +185,7 @@ end
 
 set \$internal_size_count_max = 0
 
-rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::.*\$
+rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::do_insertion.*\$
 commands
   #print *this
   #print this.size
@@ -205,7 +205,7 @@ commands
   continue
 end
 
-clear TieBreakingOpenList<StateID>::TieBreakingOpenList
+#clear TieBreakingOpenList<StateID>::TieBreakingOpenList
 
 #continue
 
