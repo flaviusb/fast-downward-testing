@@ -104,7 +104,7 @@ class GrovelOpenLists (gdb.Function):
   def grovel(self, arg):
     # We dispatch based on type
     size = 0
-    if arg.type.tag == "AlternationOpenList":
+    if arg.type.tag == "alternation_open_list::AlternationOpenList<StateID>":
       size = self.grovel_aol(arg)
     elif arg.type.tag == "BestFirstOpenList":
       size = self.grovel_bfol(arg)
@@ -121,7 +121,20 @@ class GrovelOpenLists (gdb.Function):
     return size
 
   def grovel_aol(self, arg):
-    return 0
+    # AlternationOpenLists have 2 stl containers inside: ⌜open_lists: vector<unique_ptr<OpenList<Entry>>>⌝ and ⌜priorities: vector<int>⌝
+    base_size = arg.type.sizeof
+    recursive_openlists_size = 0
+    ol_vec = StdVectorPrinter('unique_ptr<OpenList<StateID>>', arg['open_lists']).children()
+    for indirect_node in ol_vec:
+      recursive_openlists_size += indirect_node[1].type.sizeof
+      uptr = UniquePointerPrinter('OpenList<StateID>', indirect_node[1]).children()
+      for direct_node in uptr:
+        recursive_openlists_size += self.grovel(direct_node)
+    priorities_size = 0
+    prio_vec = StdVectorPrinter('int', arg['priorities']).children()
+    for num in children:
+      priorities_size += num.type.sizeof
+    return (base_size + recursive_openlists_size + priorities_size)
 
   def grovel_bfol(self, arg):
     return 0
