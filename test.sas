@@ -46,6 +46,7 @@ pick up rooma
 2 0
 1
 0 0 -1 1
+0
 end_operator
 begin_operator
 pick up roomb
@@ -55,6 +56,7 @@ pick up roomb
 2 1
 1
 0 0 -1 1
+0
 end_operator
 begin_operator
 drop rooma
@@ -64,6 +66,7 @@ drop rooma
 2 0
 1
 0 0 -1 0
+0
 end_operator
 begin_operator
 drop roomb
@@ -73,6 +76,7 @@ drop roomb
 2 1
 1
 0 0 -1 0
+0
 end_operator
 begin_operator
 move rooma to roomb free
@@ -81,6 +85,7 @@ move rooma to roomb free
 2 0
 1
 0 2 -1 1
+0
 end_operator
 begin_operator
 move roomb to rooma free
@@ -89,6 +94,7 @@ move roomb to rooma free
 2 1
 1
 0 2 -1 0
+0
 end_operator
 begin_operator
 move rooma to roomb carry
@@ -99,6 +105,7 @@ move rooma to roomb carry
 2
 0 1 -1 1
 0 2 -1 1
+0
 end_operator
 begin_operator
 move roomb to rooma carry
@@ -109,5 +116,6 @@ move roomb to rooma carry
 2
 0 1 -1 0
 0 2 -1 0
+0
 end_operator
 0
