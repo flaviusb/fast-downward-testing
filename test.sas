@@ -96,7 +96,7 @@ move rooma to roomb carry
 0 1
 1 0
 2 0
-1
+2
 0 1 -1 1
 0 2 -1 1
 end_operator
@@ -106,7 +106,7 @@ move roomb to rooma carry
 0 1
 1 1
 2 1
-1
+2
 0 1 -1 0
 0 2 -1 0
 end_operator
