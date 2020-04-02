@@ -3,12 +3,14 @@
 
 libcxxpath='/usr/share/gcc-data/x86_64-pc-linux-gnu/8.3.0/python/'
 arguments='--search "astar(lmcut())"'
+out='data.txt'
 
 usage() { cat <<HELP
 gdb.x.sh: Generates a gdb.x command set.
 Options:
   --libcxxpath  PATH
   --arguments   QUOTED FAST DOWNWARD SEARCH STRING
+  --dataout     PATH
 
 Any argument not given will use a default value.
 
@@ -42,6 +44,11 @@ while [[ $# > 0 ]]; do
         ;;
       --arguments)
         arguments="$value"
+        shift
+        shift
+        ;;
+      --dataout)
+        out="$value"
         shift
         shift
         ;;
@@ -83,6 +90,22 @@ sys.path.insert(0, libcxxpath)
 import libstdcxx.v6
 
 from libstdcxx.v6.printers import RbtreeIterator, get_value_from_Rb_tree_node, find_type, StdVectorPrinter, StdDequePrinter, SharedPointerPrinter
+
+class LogThing (gdb.Function):
+  """Write internal and grovelled sizes out"""
+
+  def __init__(self):
+    super (LogThing, self).__init__ ("logdata")
+
+  def invoke (self, out, internal, grovelled):
+    internal_string = str(internal)#.format_string()
+    grovelled_string = str(grovelled)#.format_string()
+    message = f"Internal Size: {internal_string}\\nGrovelled Size: {grovelled_string}\\n"
+    with open(str(out), "w") as fd:
+      fd.write(message)
+    return f"Logged: {message} to {out}"
+
+LogThing ()
 
 class GrovelOpenLists (gdb.Function):
   """Grovel open lists, returning size in bytes"""
@@ -215,6 +238,7 @@ commands
   end
   printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
   printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
+  print \$logdata("$out", \$internal_size_count_max, \$grovelled_size_max)
   continue
 end
 
