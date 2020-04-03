@@ -98,9 +98,9 @@ class LogThing (gdb.Function):
     super (LogThing, self).__init__ ("logdata")
 
   def invoke (self, out, internal, grovelled):
-    internal_string = str(internal)#.format_string()
-    grovelled_string = str(grovelled)#.format_string()
-    message = f"Internal Size: {internal_string}\\nGrovelled Size: {grovelled_string}\\n"
+    internal_string = str(internal)
+    grovelled_string = str(grovelled)
+    message = f"Abstract Size (elements): {internal_string}\\nGrovelled concrete Size (bytes): {grovelled_string}\\n"
     with open(str(out), "w") as fd:
       fd.write(message)
     return f"Logged: {message} to {out}"
@@ -228,16 +228,16 @@ commands
   if (this.size > \$internal_size_count_max)
     set \$internal_size_count_max = this.size
   end
-  printf "Current abstract size of open list: %u\n", this.size
+  #printf "Current abstract size of open list: %u\n", this.size
   #print \$internal_size_count_max
   #print \$grovel(*this)
   set \$temp_grovel = \$grovel(*this)
-  printf "Current approximate concrete size of open list (in bytes): %u\n", \$temp_grovel
+  #printf "Current approximate concrete size of open list (in bytes): %u\n", \$temp_grovel
   if (\$temp_grovel > \$grovelled_size_max)
     set \$grovelled_size_max = \$temp_grovel
   end
-  printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
-  printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
+  #printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
+  #printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
   print \$logdata("$out", \$internal_size_count_max, \$grovelled_size_max)
   continue
 end
