@@ -238,6 +238,12 @@ commands
   end
   #printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
   #printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
+  #print \$logdata("$out", \$internal_size_count_max, \$grovelled_size_max)
+  continue
+end
+
+break exit
+commands
   print \$logdata("$out", \$internal_size_count_max, \$grovelled_size_max)
   continue
 end
