@@ -97,10 +97,12 @@ class LogThing (gdb.Function):
   def __init__(self):
     super (LogThing, self).__init__ ("logdata")
 
-  def invoke (self, out, internal, grovelled):
+  def invoke (self, out, internal, internal_grovelled, grovelled, grovelled_internal):
     internal_string = str(internal)
     grovelled_string = str(grovelled)
-    message = f"Abstract Size (elements): {internal_string}\\nGrovelled concrete Size (bytes): {grovelled_string}\\n"
+    internal_grovelled_string = str(internal_grovelled)
+    grovelled_internal_string = str(grovelled_internal)
+    message = f"Max Abstract Size (elements): {internal_string}\\nGrovelled concrete Size for that (bytes): {internal_grovelled_string}\\nMax Grovelled concrete Size (bytes): {grovelled_string}\\nAbstract Size for that (elements): {grovelled_internal_string}\\n"
     with open(str(out), "w") as fd:
       fd.write(message)
     return f"Logged: {message} to {out}"
@@ -220,21 +222,26 @@ GrovelOpenLists ()
 end
 
 set \$internal_size_count_max = 0
+set \$grovelled_size_at_max_internal_size = 0
+set \$grovelled_size_max = 0
+set \$internal_size_count_at_max_grovelled_size = 0
 
 rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::do_insertion.*\$
 commands
   #print *this
   #print this.size
+  set \$temp_grovel = \$grovel(*this)
   if (this.size > \$internal_size_count_max)
     set \$internal_size_count_max = this.size
+    set \$grovelled_size_at_max_internal_size = \$temp_grovel
   end
   #printf "Current abstract size of open list: %u\n", this.size
   #print \$internal_size_count_max
   #print \$grovel(*this)
-  set \$temp_grovel = \$grovel(*this)
   #printf "Current approximate concrete size of open list (in bytes): %u\n", \$temp_grovel
   if (\$temp_grovel > \$grovelled_size_max)
     set \$grovelled_size_max = \$temp_grovel
+    set \$internal_size_count_at_max_grovelled_size = this.size
   end
   #printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
   #printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
@@ -244,7 +251,7 @@ end
 
 break exit
 commands
-  print \$logdata("$out", \$internal_size_count_max, \$grovelled_size_max)
+  print \$logdata("$out", \$internal_size_count_max, \$grovelled_size_at_max_internal_size, \$grovelled_size_max, \$internal_size_count_at_max_grovelled_size)
   continue
 end
 
