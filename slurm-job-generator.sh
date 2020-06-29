@@ -5,3 +5,13 @@
 # Then we build the things that need building - and get those paths that way
 # And generate the slurm script with the paths and fielname and name and wallclock time and etc
 # And then we optionally run it if the run option is selected
+
+# # Options:
+# ## Mandatory
+#    either "--name x" or "--filename x"
+#    * name defaults to `basename -s "$filename"`
+#    * filename defaults to ./"$name".sl
+#    "--wallclock time"
+#    "--memory x"
+#    either "--path-to-gdbx x" or "--gdbx-... "
+#    either "--path-to-runner2sh x" or "--runner2sh-... "
