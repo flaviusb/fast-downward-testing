@@ -126,3 +126,14 @@ while [[ $# > 0 ]]; do
     fi
 done
 
+# Write out gdb.x.sh if needed
+
+# Write out runner2.sh if needed
+
+# Write out slurm job
+
+cat > $filename <<slurmjob
+
+slurmjob
+
+# Run the slurm job if needed
