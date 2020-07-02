@@ -138,6 +138,15 @@ while [[ $# > 0 ]]; do
     fi
 done
 
+# Some checks on mandatory arguments
+
+if [ $name = 0 ]; then
+  if [ $filename = 0 ]; then
+    echo "Either a name or a filename are needed to generate a slurm job."
+    exit 2
+  fi
+fi
+
 # Write out gdb.x.sh if needed / generate gdb.x
 
 # Write out runner2.sh if needed
