@@ -38,3 +38,57 @@ HELP
 exit 0;
 }
 
+runimmediately=0
+filename=""
+
+
+while [[ $# > 0 ]]; do
+    if [ $# = 1 ]; then
+      opt="$1"
+      case "${opt}" in
+        -h)
+          usage
+          ;;
+        --help)
+          usage
+          ;;
+        --run-immediately)
+          runimmediately=1
+          ;;
+        *)
+          echo "I don't understand: $opt"
+          exit 1
+          ;;
+      esac
+    else
+      opt="$1"
+      value="$2"
+      case "${opt}" in
+        --run-immediately)
+          runimmediately=1
+          shift
+          ;;
+        -h)
+          usage
+          ;;
+        --help)
+          usage
+          ;;
+        --downward)
+          downward="$value"
+          shift
+          shift
+          ;;
+        --sas)
+          sas="$value"
+          shift
+          shift
+          ;;
+        *)
+          echo "I don't understand: $opt"
+          exit 1
+          ;;
+      esac
+    fi
+done
+
