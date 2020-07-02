@@ -39,8 +39,14 @@ exit 0;
 }
 
 runimmediately=0
-filename=""
-
+name=0
+filename=0
+wallclock=""
+memory=""
+hasgdbx=0
+pathtogdbx=""
+hasrunner2sh=0
+path2runner2sh=""
 
 while [[ $# > 0 ]]; do
     if [ $# = 1 ]; then
@@ -74,13 +80,19 @@ while [[ $# > 0 ]]; do
         --help)
           usage
           ;;
-        --downward)
-          downward="$value"
+        --name)
+          name="$value"
+          if [ $filename = 0 ]; then
+            filename="./$name.sl"
+          fi
           shift
           shift
           ;;
-        --sas)
-          sas="$value"
+        --filename)
+          filename="$value"
+          if [ $name = 0 ]; then
+            name=`basename -s "$filename"`
+          fi
           shift
           shift
           ;;
