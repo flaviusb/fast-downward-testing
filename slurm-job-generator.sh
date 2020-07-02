@@ -175,7 +175,7 @@ cat > $filename <<slurmjob
 #SBATCH --time=$wallclock # Walltime (HH:MM:SS)
 #SBATCH --mem=$memory     # Memory in MB
 
-$pathtorunner2sh $runner2downwardarg $runner2sasarg
+$pathtorunner2sh $runner2shdownwardarg $runner2shsasarg
 
 slurmjob
 
