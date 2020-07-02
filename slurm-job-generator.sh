@@ -47,6 +47,8 @@ hasgdbx=0
 pathtogdbx=""
 hasrunner2sh=0
 path2runner2sh=""
+runner2shdownward=0
+runner2shsas=0
 
 while [[ $# > 0 ]]; do
     if [ $# = 1 ]; then
@@ -118,6 +120,16 @@ while [[ $# > 0 ]]; do
           shift
           shift
           ;;
+        --runner2sh-downward)
+          runner2shdownward="$value"
+          shift
+          shift
+          ;;
+        --runner2sh-sas)
+          runner2shsas="$value"
+          shift
+          shift
+          ;;
         *)
           echo "I don't understand: $opt"
           exit 1
@@ -126,13 +138,35 @@ while [[ $# > 0 ]]; do
     fi
 done
 
-# Write out gdb.x.sh if needed
+# Write out gdb.x.sh if needed / generate gdb.x
 
 # Write out runner2.sh if needed
+
+# Make runner2sh arguments
+runner2shdownwardarg=""
+if [ $runner2shdownward = 0 ]; then
+  # ??
+  runner2shdownwardarg=""
+else
+  runner2shdownwardarg="--downward $runner2shdownward"
+fi
+runner2shsasarg=""
+if [ $runner2shsas = 0 ]; then
+  # ??
+  runner2shsasarg=""
+else
+  runner2shsasarg="--sas $runner2shsas"
+fi
 
 # Write out slurm job
 
 cat > $filename <<slurmjob
+#!/bin/bash -e
+#SBATCH --job-name=$name # job name (shows up in the queue)
+#SBATCH --time=$time     # Walltime (HH:MM:SS)
+#SBATCH --mem=$memory    # Memory in MB
+
+$pathtorunner2sh $runner2downwardarg $runner2sasarg
 
 slurmjob
 
