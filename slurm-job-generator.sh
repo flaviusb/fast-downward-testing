@@ -171,9 +171,9 @@ fi
 
 cat > $filename <<slurmjob
 #!/bin/bash -e
-#SBATCH --job-name=$name # job name (shows up in the queue)
-#SBATCH --time=$time     # Walltime (HH:MM:SS)
-#SBATCH --mem=$memory    # Memory in MB
+#SBATCH --job-name=$name  # job name (shows up in the queue)
+#SBATCH --time=$wallclock # Walltime (HH:MM:SS)
+#SBATCH --mem=$memory     # Memory in MB
 
 $pathtorunner2sh $runner2downwardarg $runner2sasarg
 
