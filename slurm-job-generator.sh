@@ -96,6 +96,28 @@ while [[ $# > 0 ]]; do
           shift
           shift
           ;;
+        --wallclock)
+          wallclock="$value"
+          shift
+          shift
+          ;;
+        --memory)
+          memory="$value"
+          shift
+          shift
+          ;;
+        --path-to-gdbx)
+          hasgdbx=1
+          pathtogdbx="$value"
+          shift
+          shift
+          ;;
+        --path-to-runner2sh)
+          hasrunner2sh=1
+          pathtorunner2sh="$value"
+          shift
+          shift
+          ;;
         *)
           echo "I don't understand: $opt"
           exit 1
