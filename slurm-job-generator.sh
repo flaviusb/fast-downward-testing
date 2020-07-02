@@ -15,3 +15,26 @@
 #    "--memory x"
 #    either "--path-to-gdbx x" or "--gdbx-... "
 #    either "--path-to-runner2sh x" or "--runner2sh-... "
+# ## Optional
+#    "--run-immediately"
+#    "--help"
+
+usage() { cat <<HELP
+slurm-job-generator.sh: Generate a slurm job, and optionally the dependencies
+Options:
+## Mandatory
+   either "--name x" or "--filename x"
+   * name defaults to \`basename -s "\$filename"\`
+   * filename defaults to ./"\$name".sl
+   "--wallclock time"
+   "--memory x"
+   either "--path-to-gdbx x" or "--gdbx-... "
+   either "--path-to-runner2sh x" or "--runner2sh-... "
+## Optional
+   "--run-immediately"
+   "--help"
+
+HELP
+exit 0;
+}
+
