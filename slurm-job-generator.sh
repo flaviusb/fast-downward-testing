@@ -147,7 +147,7 @@ if [ $name = 0 ]; then
   fi
 fi
 
-# Write out gdb.x.sh if needed / generate gdb.x
+# Write out gdb.x.sh if needed / generate gdb.x / set $pathtogdbx
 
 # Write out runner2.sh if needed
 
@@ -175,7 +175,7 @@ cat > $filename <<slurmjob
 #SBATCH --time=$wallclock # Walltime (HH:MM:SS)
 #SBATCH --mem=$memory     # Memory in MB
 
-$pathtorunner2sh $runner2shdownwardarg $runner2shsasarg
+$pathtorunner2sh $runner2shdownwardarg $runner2shsasarg --gdbx $pathtogdbx
 
 slurmjob
 
