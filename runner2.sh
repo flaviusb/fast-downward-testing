@@ -1,7 +1,17 @@
 #!/bin/bash
 
-downward=`ls ~/code/Fast-Downward-c9844230bcf2/builds/release/bin/downward`
-sas=`ls ~/code/Fast-Downward-c9844230bcf2/output.sas`
+downward=0
+if [ -f ~/code/Fast-Downward-c9844230bcf2/builds/release/bin/downward ]; then
+  downward=`ls ~/code/Fast-Downward-c9844230bcf2/builds/release/bin/downward`
+fi
+sas=0
+if [ -f ~/code/Fast-Downward-c9844230bcf2/output.sas ]; then
+  sas=`ls ~/code/Fast-Downward-c9844230bcf2/output.sas`
+fi
+gdbx=0
+if [ -f gdb.x ]; then
+  gdbx=`ls gdb.x`
+fi
 
 usage() { cat <<HELP
 runner2.sh: Memory size measuring harness for fast downward.
@@ -10,6 +20,8 @@ Options:
               Full path to downward executable
   --sas       QUOTED PATH
               Full path to the sas file to search
+  --gdbx      PATH
+              Path to the gdb harness
 
 Any argument not given will use a default value.
 
@@ -46,6 +58,11 @@ while [[ $# > 0 ]]; do
         shift
         shift
         ;;
+      --gdbx)
+        gdbx="$value"
+        shift
+        shift
+        ;;
       *)
         echo "I don't understand: $opt"
         exit 1
@@ -53,7 +70,20 @@ while [[ $# > 0 ]]; do
     esac
 done
 
+if [ $sas = 0 ]; then
+  echo "No sas file found."
+  exit 3
+fi
 
+if [ $downward = 0 ]; then
+  echo "No downward executable found."
+  exit 4
+fi
 
-cat "$sas" | gdb -se="$downward" -x gdb.x
+if [ $gdbx = 0 ]; then
+  echo "No gdb harness file found."
+  exit 3
+fi
+
+cat "$sas" | gdb -se="$downward" -x "$gdbx"
 #gdb -se="$downward" -x gdb.x
