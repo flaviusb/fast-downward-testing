@@ -180,3 +180,8 @@ $pathtorunner2sh $runner2shdownwardarg $runner2shsasarg
 slurmjob
 
 # Run the slurm job if needed
+
+if [ $runimmediately = 1 ]; then
+  sbatch $filename
+fi
+
