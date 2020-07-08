@@ -181,6 +181,16 @@ if [ $hasrunner2sh = 0 ]; then
   exit 2
 fi
 
+if [ -z $wallclock ]; then
+  echo "No wallclock time set. Use --wallclock to set it."
+  exit 3
+fi
+
+if [ -z $memory ]; then
+  echo "No memory limit set. Use --memory to set it."
+  exit 4
+fi
+
 # Write out slurm job
 
 cat > $filename <<slurmjob
