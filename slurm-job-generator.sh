@@ -18,6 +18,8 @@
 # ## Optional
 #    "--run-immediately"
 #    "--help"
+#    "--runner2sh-sas"
+#    "--runner2sh-downward"
 
 usage() { cat <<HELP
 slurm-job-generator.sh: Generate a slurm job, and optionally the dependencies
@@ -33,6 +35,8 @@ Options:
 ## Optional
    "--run-immediately"
    "--help"
+    "--runner2sh-sas"
+    "--runner2sh-downward"
 
 HELP
 exit 0;
