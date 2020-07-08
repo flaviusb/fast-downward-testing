@@ -149,7 +149,7 @@ fi
 
 # Write out gdb.x.sh if needed / generate gdb.x / set $pathtogdbx
 
-# Write out runner2.sh if needed
+# Write out runner2.sh if needed / set $pathtorunner2sh and $hasrunner2sh
 
 # Make runner2sh arguments
 runner2shdownwardarg=""
@@ -166,6 +166,20 @@ if [ $runner2shsas = 0 ]; then
 else
   runner2shsasarg="--sas $runner2shsas"
 fi
+runner2shgdbxarg=""
+if [ $pathtogdbx = 0 ]; then
+  # ??
+  runner2shgdbxarg=""
+else
+  runner2shgdbxarg="--gdbx $pathtogdbx"
+fi
+
+# Check for all needed args
+
+if [ $hasrunner2sh = 0 ]; then
+  echo "No runner2.sh - possibly missing argument?"
+  exit 2
+fi
 
 # Write out slurm job
 
@@ -175,7 +189,7 @@ cat > $filename <<slurmjob
 #SBATCH --time=$wallclock # Walltime (HH:MM:SS)
 #SBATCH --mem=$memory     # Memory in MB
 
-$pathtorunner2sh $runner2shdownwardarg $runner2shsasarg --gdbx $pathtogdbx
+$pathtorunner2sh $runner2shdownwardarg $runner2shsasarg $runner2shgdbxarg
 
 slurmjob
 
