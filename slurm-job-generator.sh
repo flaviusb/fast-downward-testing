@@ -186,7 +186,7 @@ else
   runner2shgdbxarg="--gdbx $pathtogdbx"
 fi
 runner2shgdbcommandarg=""
-if [ -n $runner2shgdbcommand ]
+if [ -n $runner2shgdbcommand ]; then
   runner2shgdbcommandarg="--gdb-command $runner2shgdbcommand"
 fi
 
