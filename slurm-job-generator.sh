@@ -20,6 +20,7 @@
 #    "--help"
 #    "--runner2sh-sas"
 #    "--runner2sh-downward"
+#    "--runner2sh-gdb-command"
 
 usage() { cat <<HELP
 slurm-job-generator.sh: Generate a slurm job, and optionally the dependencies
@@ -37,6 +38,7 @@ Options:
    "--help"
     "--runner2sh-sas"
     "--runner2sh-downward"
+    "--runner2sh-gdb-command"
 
 HELP
 exit 0;
@@ -53,6 +55,7 @@ hasrunner2sh=0
 path2runner2sh=""
 runner2shdownward=0
 runner2shsas=0
+runner2gdbcommand=""
 
 while [[ $# > 0 ]]; do
     if [ $# = 1 ]; then
@@ -134,6 +137,11 @@ while [[ $# > 0 ]]; do
           shift
           shift
           ;;
+        --runner2sh-gdb-command)
+          gdbcommand="$value"
+          shift
+          shift
+          ;;
         *)
           echo "I don't understand: $opt"
           exit 1
@@ -177,6 +185,10 @@ if [ $hasgdbx = 0 ]; then
 else
   runner2shgdbxarg="--gdbx $pathtogdbx"
 fi
+runner2shgdbcommandarg=""
+if [ -n $runner2shgdbcommand ]
+  runner2shgdbcommandarg="--gdb-command $runner2shgdbcommand"
+fi
 
 # Check for all needed args
 
@@ -203,7 +215,7 @@ cat > $filename <<slurmjob
 #SBATCH --time=$wallclock # Walltime (HH:MM:SS)
 #SBATCH --mem=$memory     # Memory in MB
 
-$pathtorunner2sh $runner2shdownwardarg $runner2shsasarg $runner2shgdbxarg
+$pathtorunner2sh $runner2shdownwardarg $runner2shsasarg $runner2shgdbxarg $runner2shgdbcommandarg
 
 slurmjob
 

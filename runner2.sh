@@ -12,16 +12,19 @@ gdbx=0
 if [ -f gdb.x ]; then
   gdbx=`ls gdb.x`
 fi
+gdbcommand="gdb"
 
 usage() { cat <<HELP
 runner2.sh: Memory size measuring harness for fast downward.
 Options:
-  --downward  QUOTED PATH
-              Full path to downward executable
-  --sas       QUOTED PATH
-              Full path to the sas file to search
-  --gdbx      PATH
-              Path to the gdb harness
+  --downward     QUOTED PATH
+                 Full path to downward executable
+  --sas          QUOTED PATH
+                 Full path to the sas file to search
+  --gdbx         PATH
+                 Path to the gdb harness
+  --gdb-command  PATH or name
+                 Command to run gdb
 
 Any argument not given will use a default value.
 
@@ -63,6 +66,11 @@ while [[ $# > 0 ]]; do
         shift
         shift
         ;;
+      --gdb-command)
+        gdbcommand="$value"
+        shift
+        shift
+        ;;
       *)
         echo "I don't understand: $opt"
         exit 1
@@ -85,5 +93,5 @@ if [ $gdbx = 0 ]; then
   exit 3
 fi
 
-cat "$sas" | gdb -se="$downward" -x "$gdbx"
+cat "$sas" | $gdbcommand -se="$downward" -x "$gdbx"
 #gdb -se="$downward" -x gdb.x
