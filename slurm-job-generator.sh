@@ -9,7 +9,7 @@
 # # Options:
 # ## Mandatory
 #    either "--name x" or "--filename x"
-#    * name defaults to `basename -s "$filename"`
+#    * name defaults to `basename -s ".sl" "$filename"`
 #    * filename defaults to ./"$name".sl
 #    "--wallclock time"
 #    "--memory x"
@@ -26,7 +26,7 @@ slurm-job-generator.sh: Generate a slurm job, and optionally the dependencies
 Options:
 ## Mandatory
    either "--name x" or "--filename x"
-   * name defaults to \`basename -s "\$filename"\`
+   * name defaults to \`basename -s ".sl" "\$filename"\`
    * filename defaults to ./"\$name".sl
    "--wallclock time"
    "--memory x"
@@ -97,7 +97,7 @@ while [[ $# > 0 ]]; do
         --filename)
           filename="$value"
           if [ $name = 0 ]; then
-            name=`basename -s "$filename"`
+            name=`basename -s ".sl" "$filename"`
           fi
           shift
           shift
