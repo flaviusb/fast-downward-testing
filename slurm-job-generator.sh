@@ -138,7 +138,7 @@ while [[ $# > 0 ]]; do
           shift
           ;;
         --runner2sh-gdb-command)
-          gdbcommand="$value"
+          runner2shgdbcommand="$value"
           shift
           shift
           ;;
@@ -186,7 +186,9 @@ else
   runner2shgdbxarg="--gdbx $pathtogdbx"
 fi
 runner2shgdbcommandarg=""
-if [ -n $runner2shgdbcommand ]; then
+if [ -z $runner2shgdbcommand ]; then
+  runner2shgdbcommandarg=""
+else
   runner2shgdbcommandarg="--gdb-command $runner2shgdbcommand"
 fi
 
