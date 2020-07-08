@@ -147,7 +147,7 @@ if [ $name = 0 ]; then
   fi
 fi
 
-# Write out gdb.x.sh if needed / generate gdb.x / set $pathtogdbx
+# Write out gdb.x.sh if needed / generate gdb.x / set $pathtogdbx and $hasgdbx
 
 # Write out runner2.sh if needed / set $pathtorunner2sh and $hasrunner2sh
 
@@ -167,7 +167,7 @@ else
   runner2shsasarg="--sas $runner2shsas"
 fi
 runner2shgdbxarg=""
-if [ $pathtogdbx = 0 ]; then
+if [ $hasgdbx = 0 ]; then
   # ??
   runner2shgdbxarg=""
 else
