@@ -69,6 +69,7 @@ while [[ $# > 0 ]]; do
           ;;
         --run-immediately)
           runimmediately=1
+          shift
           ;;
         *)
           echo "I don't understand: $opt"
