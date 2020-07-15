@@ -4,6 +4,7 @@
 libcxxpath='/usr/share/gcc-data/x86_64-pc-linux-gnu/8.3.0/python/'
 arguments='--search "astar(lmcut())"'
 out='data.txt'
+gdbx="gdb.x"
 
 usage() { cat <<HELP
 gdb.x.sh: Generates a gdb.x command set.
@@ -11,6 +12,7 @@ Options:
   --libcxxpath  PATH
   --arguments   QUOTED FAST DOWNWARD SEARCH STRING
   --dataout     PATH
+  --gdbxname    PATH
 
 Any argument not given will use a default value.
 
@@ -52,6 +54,11 @@ while [[ $# > 0 ]]; do
         shift
         shift
         ;;
+      --gdbxname)
+        gdbx="$value"
+        shift
+        shift
+        ;;
       *)
         echo "I don't understand: $opt"
         exit 1
@@ -61,7 +68,7 @@ done
 
 
 
-cat > gdb.x <<blerg
+cat > "$gdbx" <<blerg
 set language c++
 # \$internal_size_count_max is the number of elements the OpenList thinks it has
 set \$internal_size_count_max = 0
