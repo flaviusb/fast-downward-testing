@@ -79,7 +79,8 @@ set print object on
 set print array on
 set print array-indexes on
 set print inferior-events off
-set print frame-info short-location
+# This is not available on gdb 8.3 apparently
+#  set print frame-info short-location
 set print entry-values no
 set print frame-arguments none
 
