@@ -78,6 +78,10 @@ set print pretty on
 set print object on
 set print array on
 set print array-indexes on
+set print inferior-events off
+set print frame-info short-location
+set print entry-values no
+set print frame-arguments none
 
 python
 import gdb
@@ -232,6 +236,8 @@ set \$internal_size_count_max = 0
 set \$grovelled_size_at_max_internal_size = 0
 set \$grovelled_size_max = 0
 set \$internal_size_count_at_max_grovelled_size = 0
+set \$spins = 0
+set \$spins_10ks = 0
 
 rbreak ^[0-9a-zA-Z_::]*OpenList<[0-9a-zA-Z_<>]*>::do_insertion.*\$
 commands
@@ -249,6 +255,11 @@ commands
   if (\$temp_grovel > \$grovelled_size_max)
     set \$grovelled_size_max = \$temp_grovel
     set \$internal_size_count_at_max_grovelled_size = this.size
+  end
+  if (\$spins == 10000)
+    set \$spins = 0
+    set \$spins_10ks = \$spins_10ks + 1
+    printf "Max Abstract Size (elements): %u \nGrovelled concrete Size for that (bytes): %u \nMax Grovelled concrete Size (bytes): %u \nAbstract Size for that (elements): %u \nCurrent Abstract Size (elements) %u \nCurrent gravelled concrete size (bytes) %u\nCurrent spins * 10k: %u", \$internal_size_count_max, \$grovelled_size_at_max_internal_size, \$grovelled_size_max, \$internal_size_count_at_max_grovelled_size, this.size, \$temp_grovel, $\spins_10ks
   end
   #printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
   #printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
