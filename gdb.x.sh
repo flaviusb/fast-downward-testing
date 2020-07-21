@@ -261,6 +261,8 @@ commands
     set \$spins = 0
     set \$spins_10ks = \$spins_10ks + 1
     printf "Max Abstract Size (elements): %u \nGrovelled concrete Size for that (bytes): %u \nMax Grovelled concrete Size (bytes): %u \nAbstract Size for that (elements): %u \nCurrent Abstract Size (elements) %u \nCurrent gravelled concrete size (bytes) %u\nCurrent spins * 10k: %u", \$internal_size_count_max, \$grovelled_size_at_max_internal_size, \$grovelled_size_max, \$internal_size_count_at_max_grovelled_size, this.size, \$temp_grovel, $\spins_10ks
+  else
+    set \$spins = \$spins + 1
   end
   #printf "Maximum abstract size of open list: %u\n", \$internal_size_count_max
   #printf "Maximum approximate concrete size of open list (in bytes): %u\n", \$grovelled_size_max
