@@ -84,6 +84,10 @@ set print inferior-events off
 set print entry-values no
 set print frame-arguments none
 
+echo With gdbx name: $gdbx \n
+echo Logging to: $out \n
+echo Search string: $arguments \n
+
 python
 import gdb
 import gdb.types
